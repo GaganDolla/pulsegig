@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "251977677456",
+    "project_id": "pulsegig-f3492",
+    "storage_bucket": "pulsegig-f3492.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251977677456:android:b521aa97dab63cabab7615",
+        "android_client_info": {
+          "package_name": "com.example.pulsegig"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3wJRgjTpaS0gZO7SgnLOjCqiK71AocLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251977677456:android:93ef68e777ff304eab7615",
+        "android_client_info": {
+          "package_name": "com.gagandolla.pulsegig"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3wJRgjTpaS0gZO7SgnLOjCqiK71AocLc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

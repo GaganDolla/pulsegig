@@ -1,4 +1,4 @@
-package com.example.pulsegig
+package com.gagandolla.pulsegig
 
 import io.flutter.embedding.android.FlutterActivity
 
