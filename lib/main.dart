@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
 import 'services/auth_service.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
 import 'screens/sign_up_screen.dart';
+import 'screens/registration_screen.dart';
+import 'screens/clinic/clinic_dashboard_screen.dart';
+import 'screens/professional/professional_dashboard_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,9 +26,11 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginScreen.routeName: (_) => const LoginScreen(),
         SignUpScreen.routeName: (_) => const SignUpScreen(),
-        HomeScreen.routeName:  (_) => const HomeScreen(),
+        RegistrationScreen.routeName: (_) => const RegistrationScreen(),
+        ClinicDashboardScreen.routeName: (_) => const ClinicDashboardScreen(),
+        ProfessionalDashboardScreen.routeName: (_) => const ProfessionalDashboardScreen(),
       },
-      home: StreamBuilder(
+      home: StreamBuilder<User?>(
         stream: AuthService().userChanges,
         builder: (ctx, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
@@ -33,9 +38,28 @@ class MyApp extends StatelessWidget {
               body: Center(child: CircularProgressIndicator()),
             );
           }
-          return (snap.data != null)
-            ? const HomeScreen()
-            : const LoginScreen();
+          final user = snap.data;
+          if (user == null) {
+            return const LoginScreen();
+          }
+          return FutureBuilder<String?>(
+            future: AuthService().getUserRole(user),
+            builder: (ctx, roleSnap) {
+              if (roleSnap.connectionState == ConnectionState.waiting) {
+                return const Scaffold(
+                  body: Center(child: CircularProgressIndicator()),
+                );
+              }
+              final role = roleSnap.data;
+              if (role == 'office' || role == 'clinic') {
+                return const ClinicDashboardScreen();
+              } else if (role == 'professional') {
+                return const ProfessionalDashboardScreen();
+              } else {
+                return const LoginScreen();
+              }
+            },
+          );
         },
       ),
       debugShowCheckedModeBanner: false,

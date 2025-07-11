@@ -3,6 +3,10 @@ import '../services/auth_service.dart';
 import 'sign_up_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
+import 'registration_screen.dart';
+import 'clinic/clinic_dashboard_screen.dart';
+import 'professional/professional_dashboard_screen.dart';
+
 class LoginScreen extends StatefulWidget {
   static const routeName = '/login';
   const LoginScreen({super.key});
@@ -24,13 +28,27 @@ class _LoginScreenState extends State<LoginScreen> {
       _errorMsg = null;
     });
     try {
-      await AuthService().signIn(
+      final user = await AuthService().signIn(
         _emailCtrl.text.trim(),
         _passCtrl.text,
       ).timeout(const Duration(seconds: 10), onTimeout: () {
         throw TimeoutException('Timeout');
       });
-      // successful sign-in will be handled by the StreamBuilder in main
+      if (user != null) {
+        final role = await AuthService().getUserRole(user);
+        if (role == 'professional') {
+          Navigator.pushReplacementNamed(
+            context,
+            ProfessionalDashboardScreen.routeName,
+          );
+        } else {
+          Navigator.pushReplacementNamed(
+            context,
+            ClinicDashboardScreen.routeName,
+          );
+        }
+        return;
+      }
     } on FirebaseAuthException catch (e) {
       String message;
       switch (e.code) {
@@ -131,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: _loading
                     ? null
                     : () => Navigator.pushNamed(
-                          context, SignUpScreen.routeName),
+                          context, RegistrationScreen.routeName),
                 child: const Text('Create an account'),
               ),
             ],
